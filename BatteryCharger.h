@@ -10,7 +10,7 @@
 #define MAXTEMP 50.0 //Graden Celsius
 #define R_EMITTER 21.8
 #define R_BASE 2160.0
-#define CHARGE_CURRENT 0.07
+#define CHARGE_CURRENT 0.085
 #define SUPPLY_VOLTAGE 12.10
 #define V_INPUT_PIN A0
 #define V_BASE_PIN A1

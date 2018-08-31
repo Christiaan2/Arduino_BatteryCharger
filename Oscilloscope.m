@@ -111,12 +111,12 @@ while(sampling)
             
             SensorData = double(SensorReading) / 1024 * 5;
             plotData = zeros(1,NChannels);
-            plotData(1) = (SensorData(1) - SensorData(2)) / 2160;
+            plotData(1) = (SensorData(1) - SensorData(2)) / 2160 - ((SensorData(2) - SensorData(4)) / 9870);
             plotData(2) = (SensorData(4) / 21.8) - plotData(1);
             plotData(3) = SensorData(3) * 1024 / 5;
             plotData(4) = SensorData(1);
             plotData(5) = (SensorData(6) - 0.5) * 100;
-            plotData(6) = 12.10 - SensorData(5);
+            plotData(6) = 12.10 - (SensorData(5) * 2);
             
             %Update texfile
             fprintf(fileId,'%u',Time);

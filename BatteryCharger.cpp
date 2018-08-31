@@ -32,9 +32,9 @@ void BatteryCharger::run()
 		int V_BATTERYbin = analogRead(V_BATTERY_PIN);
 		int V_batTemp = analogRead(V_TEMP_PIN);
 		double inputVoltage = (V_INPUTbin / 1024.0) * 5.0;
-		double baseCurrent = (inputVoltage - ((V_BASEbin / 1024.0) * 5.0)) / R_BASE;
+		double baseCurrent = (inputVoltage - ((V_BASEbin / 1024.0) * 5.0)) / R_BASE; //Not baseCurrent but current through 2.2k resistor
 		double collectorCurrent = (((V_EMITTERbin / 1024.0) * 5.0) / R_EMITTER) - baseCurrent;
-		double batVoltage = SUPPLY_VOLTAGE - (((V_BATTERYbin / 1024.0) * 5.0));
+		//double batVoltage = SUPPLY_VOLTAGE - (((V_BATTERYbin / 1024.0) * 5.0) * 2);
 		double batTemp = (((V_batTemp / 1024.0) * 5.0) - 0.5) * 100.0;
 
 		int PWM_value = 0;
@@ -70,7 +70,7 @@ void BatteryCharger::run()
 		oscilloscope.sendData();
 	}
 
-	if (stop && time > 0 && millis() - time > 20000)
+	if (stop && time > 0 && millis() - time > 40000)
 	{
 		digitalWrite(YELLOWLEDPIN, LOW);
 		oscilloscope.checkButton(Button::longPressed);
