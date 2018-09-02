@@ -7,7 +7,7 @@
 #include "Timer.h"
 #include "Oscilloscope.h"
 
-#define MAXTEMP 50.0 //Graden Celsius
+#define MAXTEMP 40.0 //Graden Celsius
 #define R_EMITTER 21.8
 #define R_BASE 2160.0
 #define CHARGE_CURRENT 0.085
