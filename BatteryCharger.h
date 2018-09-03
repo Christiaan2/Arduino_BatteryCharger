@@ -7,11 +7,10 @@
 #include "Timer.h"
 #include "Oscilloscope.h"
 
-#define MAXTEMP 50.0 //Graden Celsius
-#define R_EMITTER 21.8
-#define R_BASE 2160.0
-#define CHARGE_CURRENT 0.085
-#define SUPPLY_VOLTAGE 12.10
+#define MAXTEMP 35.0 //Graden Celsius
+#define R_EMITTER 10.1
+#define CHARGE_CURRENT 0.125
+#define SUPPLY_VOLTAGE 24
 #define V_INPUT_PIN A0
 #define V_BASE_PIN A1
 #define V_BATTERY_PIN A2

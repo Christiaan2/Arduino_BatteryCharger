@@ -24,14 +24,14 @@ fopen(Arduino); %Initiate arduino communication
 %Create figure with labels and grid
 figure('units','normalized','outerposition',[0 0.04 1 0.95]);
 subplot(3,2,1)
-title('Base Current (A)')
+title('Charge current (A)')
 hold on
 grid on
 grid minor
 %ylim([0,5]);%%%
 xlabel('Time [ms]')
 subplot(3,2,2)
-title('Collector Current (A)')
+title('Battery voltage (V)')
 hold on
 grid on
 grid minor
@@ -52,14 +52,14 @@ grid minor
 %ylim([0,5]);%%%
 xlabel('Time [ms]')
 subplot(3,2,5)
-title('Temperature (graden C)')
+title('Gate voltage (V)')
 hold on
 grid on
 grid minor
 %ylim([0,5]);%%%
 xlabel('Time [ms]')
 subplot(3,2,6)
-title('Battery voltage (V)')
+title('Temperature (graden C)')
 hold on
 grid on
 grid minor
@@ -111,12 +111,12 @@ while(sampling)
             
             SensorData = double(SensorReading) / 1024 * 5;
             plotData = zeros(1,NChannels);
-            plotData(1) = (SensorData(1) - SensorData(2)) / 2160 - ((SensorData(2) - SensorData(4)) / 9870);
-            plotData(2) = (SensorData(4) / 21.8) - plotData(1);
+            plotData(1) = (SensorData(4) / 10.1) + ((SensorData(5) * 5.55) / (98000 + 21000));
+            plotData(2) = 24 - (SensorData(5) * 5.55);
             plotData(3) = SensorData(3) * 1024 / 5;
             plotData(4) = SensorData(1);
-            plotData(5) = (SensorData(6) - 0.5) * 100;
-            plotData(6) = 12.10 - (SensorData(5) * 2);
+            plotData(5) = SensorData(2) * (9.59 / 3.06);
+            plotData(6) = (SensorData(6) - 0.5) * 100;
             
             %Update texfile
             fprintf(fileId,'%u',Time);
