@@ -111,7 +111,7 @@ while(sampling)
             
             SensorData = double(SensorReading) / 1024 * 5;
             plotData = zeros(1,NChannels);
-            plotData(1) = (SensorData(4) / 10.1) + ((SensorData(5) * 5.55) / (98000 + 21000));
+            plotData(1) = (SensorData(4) / 10.2) + ((SensorData(5) * 5.55) / (98000 + 21000));
             plotData(2) = 24 - (SensorData(5) * 5.55);
             plotData(3) = SensorData(3) * 1024 / 5;
             plotData(4) = SensorData(1);

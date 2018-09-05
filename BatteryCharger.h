@@ -8,7 +8,7 @@
 #include "Oscilloscope.h"
 
 #define MAXTEMP 35.0 //Graden Celsius
-#define R_EMITTER 10.1
+#define R_EMITTER 10.2
 #define CHARGE_CURRENT 0.125
 #define SUPPLY_VOLTAGE 24
 #define V_INPUT_PIN A0

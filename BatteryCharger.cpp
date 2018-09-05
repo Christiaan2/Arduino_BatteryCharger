@@ -5,7 +5,7 @@
 #include "BatteryCharger.h"
 
 BatteryCharger::BatteryCharger()
-	: timer(5000), oscilloscope(2), pid(650.0, 320.0), stop(false), time(0)
+	: timer(5000), oscilloscope(2), pid(125.0, 95.0, 0.0), stop(false), time(0)
 {
 	pinMode(REDLEDPIN, OUTPUT);
 	pinMode(YELLOWLEDPIN, OUTPUT);
@@ -33,7 +33,7 @@ void BatteryCharger::run()
 		int V_batTemp = analogRead(V_TEMP_PIN);
 		double inputVoltage = (V_INPUTbin / 1024.0) * 5.0;
 		//double baseCurrent = (inputVoltage - ((V_BASEbin / 1024.0) * 5.0)) / R_BASE; //Not baseCurrent but current through 2.2k resistor
-		double collectorCurrent = (((V_EMITTERbin / 1024.0) * 5.0) / R_EMITTER) + ((V_BATTERYbin * 5.55) / (98000 + 21000));
+		double collectorCurrent = (((V_EMITTERbin / 1024.0) * 5.0) / R_EMITTER) + (((V_BATTERYbin / 1024.0 * 5.0) * 5.55) / (98000.0 + 21000.0));
 		//double batVoltage = SUPPLY_VOLTAGE - (((V_BATTERYbin / 1024.0) * 5.0) * 5.55);
 		double batTemp = (((V_batTemp / 1024.0) * 5.0) - 0.5) * 100.0;
 
