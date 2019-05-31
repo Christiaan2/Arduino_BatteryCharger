@@ -11,7 +11,7 @@ clear all
 close all
 clc
 
-NChannels = 6;
+NChannels = 4;
 
 %WindowSize = 10000*10*6; %Last 10 seconds are visible in figure
 colours = {[0, 0.4470, 0.7410], [0.8500, 0.3250, 0.0980], [0.9290, 0.6940, 0.1250], ...
@@ -23,47 +23,29 @@ fopen(Arduino); %Initiate arduino communication
 
 %Create figure with labels and grid
 figure('units','normalized','outerposition',[0 0.04 1 0.95]);
-subplot(3,2,1)
+subplot(2,2,1)
 title('Charge current (A)')
 hold on
 grid on
 grid minor
-%ylim([0,5]);%%%
 xlabel('Time [ms]')
-subplot(3,2,2)
+subplot(2,2,2)
 title('Battery voltage (V)')
 hold on
 grid on
 grid minor
-%ylim([0,5]);%%%
 xlabel('Time [ms]')
-subplot(3,2,3)
+subplot(2,2,3)
 title('PWM signal')
 hold on
 grid on
 grid minor
-%ylim([0,5]);%%%
 xlabel('Time [ms]')
-subplot(3,2,4)
-title('Input Voltage (V)')
-hold on
-grid on
-grid minor
-%ylim([0,5]);%%%
-xlabel('Time [ms]')
-subplot(3,2,5)
-title('Gate voltage (V)')
-hold on
-grid on
-grid minor
-%ylim([0,5]);%%%
-xlabel('Time [ms]')
-subplot(3,2,6)
+subplot(2,2,4)
 title('Temperature (graden C)')
 hold on
 grid on
 grid minor
-%ylim([0,5]);%%%
 xlabel('Time [ms]')
 
 %Open textfile
@@ -78,7 +60,7 @@ while(sampling)
     if(start_message == 65535) %Start sign recieved from Arduino?
         j = j + 1;
         for k = 1:NChannels
-            subplot(3,2,k)
+            subplot(2,2,k)
             h(k) = animatedline;
             h(k).Color = colours{1}; %Set colour of line
         end
@@ -111,12 +93,10 @@ while(sampling)
             
             SensorData = double(SensorReading) / 1024 * 5;
             plotData = zeros(1,NChannels);
-            plotData(1) = (SensorData(4) / 10.2) + ((SensorData(5) * 5.55) / (98000 + 21000));
-            plotData(2) = 24 - (SensorData(5) * 5.55);
-            plotData(3) = SensorData(3) * 1024 / 5;
-            plotData(4) = SensorData(1);
-            plotData(5) = SensorData(2) * (9.59 / 3.06);
-            plotData(6) = (SensorData(6) - 0.5) * 100;
+            plotData(1) = (SensorData(2) / 6.8) + (SensorData(3) / 21000);
+            plotData(2) = 24 - (SensorData(3) / 21000 * (21000 + 98000));
+            plotData(3) = SensorData(1);
+            plotData(4) = (SensorData(4) - 0.5) * 100;
             
             %Update texfile
             fprintf(fileId,'%u',Time);

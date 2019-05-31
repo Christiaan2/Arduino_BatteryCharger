@@ -4,8 +4,8 @@
 #define BUTTON_H
 #include "Arduino.h"
 
-#define TIMESHORTPRESS 5
-#define TIMELONGPRESS 1000
+#define TIMESHORTPRESS 5 // in ms
+#define TIMELONGPRESS 1000 // in ms
 
 class Button
 {

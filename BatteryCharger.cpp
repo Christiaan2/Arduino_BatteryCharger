@@ -5,7 +5,7 @@
 #include "BatteryCharger.h"
 
 BatteryCharger::BatteryCharger()
-	: timer(5000), oscilloscope(2), pid(125.0, 95.0, 0.0), stop(false), time(0)
+	: timer(FREQUENCY), oscilloscope(BUTTON_PIN), pid(PID_KP, PID_KD, PID_KI), stop(false), time(0)
 {
 	pinMode(REDLEDPIN, OUTPUT);
 	pinMode(YELLOWLEDPIN, OUTPUT);
@@ -16,6 +16,8 @@ BatteryCharger::BatteryCharger()
 void BatteryCharger::initialize()
 {
 	digitalWrite(YELLOWLEDPIN, HIGH);
+	digitalWrite(GREENLEDPIN, LOW);
+	digitalWrite(REDLEDPIN, LOW);
 	digitalWrite(PWM_PIN, LOW);
 	oscilloscope.initializeSerial();
 }
@@ -26,16 +28,12 @@ void BatteryCharger::run()
 
 	if (timer.fire() && oscilloscope.getSampling_on())
 	{
-		int V_INPUTbin = analogRead(V_INPUT_PIN);
-		int V_BASEbin = analogRead(V_BASE_PIN);
-		int V_EMITTERbin = analogRead(V_EMITTER_PIN);
-		int V_BATTERYbin = analogRead(V_BATTERY_PIN);
-		int V_batTemp = analogRead(V_TEMP_PIN);
-		double inputVoltage = (V_INPUTbin / 1024.0) * 5.0;
-		//double baseCurrent = (inputVoltage - ((V_BASEbin / 1024.0) * 5.0)) / R_BASE; //Not baseCurrent but current through 2.2k resistor
-		double collectorCurrent = (((V_EMITTERbin / 1024.0) * 5.0) / R_EMITTER) + (((V_BATTERYbin / 1024.0 * 5.0) * 5.55) / (98000.0 + 21000.0));
-		//double batVoltage = SUPPLY_VOLTAGE - (((V_BATTERYbin / 1024.0) * 5.0) * 5.55);
-		double batTemp = (((V_batTemp / 1024.0) * 5.0) - 0.5) * 100.0;
+		int Current_Sensing_Voltage = analogRead(CURRENT_SENSING_PIN);
+		int Battery_Voltage = analogRead(BATTERY_PIN);
+		int Battery_Temperature = analogRead(TEMP_PIN);
+		double Charge_Current = ((Current_Sensing_Voltage / 1024.0 * 5.0) / R_CURRENT_SENSING) + (Battery_Voltage / 1024.0 * 5.0) / BATTERY_VOLTAGE_DIVIDER_1;
+		double batVoltage = SUPPLY_VOLTAGE - ((Battery_Voltage / 1024.0 * 5.0) / BATTERY_VOLTAGE_DIVIDER_1 * (BATTERY_VOLTAGE_DIVIDER_1 + BATTERY_VOLTAGE_DIVIDER_2));
+		double batTemp = ((Battery_Temperature / 1024.0 * 5.0) - 0.5) * 100.0;
 
 		int PWM_value = 0;
 
@@ -43,35 +41,37 @@ void BatteryCharger::run()
 		{
 			if (millis() > MAXTIME)
 			{
+				// Charge cycle completed
 				digitalWrite(GREENLEDPIN, HIGH);
 				stop = true;
 				time = millis();
 			}
 			else if (batTemp > MAXTEMP)
 			{
+				// Battery temperature too high
 				digitalWrite(REDLEDPIN, HIGH);
 				stop = true;
 				time = millis();
 			}
 			else
 			{
-				PWM_value = pid.calcPidTerm(CHARGE_CURRENT, collectorCurrent);
+				// For Litium ion cells implement maximum voltage
+				PWM_value = pid.calcPidTerm(CHARGE_CURRENT, Charge_Current);
 			}
 			analogWrite(PWM_PIN, PWM_value);
 		}
 
-		oscilloscope.setSensorReading(0, V_INPUTbin);
-		oscilloscope.setSensorReading(1, V_BASEbin);
-		oscilloscope.setSensorReading(2, PWM_value);
-		oscilloscope.setSensorReading(3, V_EMITTERbin);
-		oscilloscope.setSensorReading(4, V_BATTERYbin);
-		oscilloscope.setSensorReading(5, V_batTemp);
+		oscilloscope.setSensorReading(0, PWM_value);
+		oscilloscope.setSensorReading(1, Current_Sensing_Voltage);
+		oscilloscope.setSensorReading(2, Battery_Voltage);
+		oscilloscope.setSensorReading(3, Battery_Temperature);
 		oscilloscope.setTime();
 		oscilloscope.sendData();
 	}
 
 	if (stop && time > 0 && millis() - time > 40000)
 	{
+		// Stop monitoring battery after charge is completed
 		digitalWrite(YELLOWLEDPIN, LOW);
 		oscilloscope.checkButton(Button::longPressed);
 		while (true)
