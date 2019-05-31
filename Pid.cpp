@@ -5,7 +5,7 @@
 #include "Pid.h"
 
 Pid::Pid(double Kp, double Kd, double Ki)
-	: Kp(Kp), Kd(Kd), Ki(Ki), prevError(0), prevOutput(0), sumError(0)
+	: Kp(Kp), Kd(Kd), Ki(Ki), prevError(0.0), prevPidTerm(0.0), sumError(0.0)
 {
 }
 
@@ -22,15 +22,15 @@ int Pid::calcPidTerm(double setPoint, double curValue)
 		sumError = sumError + error;
 		double pidTerm = (Kp * error) + (Kd * (error - prevError)) + (Ki * sumError);
 		prevError = error;
-		int output = constrain(prevOutput + int(pidTerm), 0, 255);
-		prevOutput = output;
+		prevPidTerm = constrain(prevPidTerm + pidTerm, 0.0, 255.0);
+		int output = int(round(prevPidTerm));
 		return output;
 	}
 }
 
 void Pid::reset()
 {
-	prevOutput = 0;
+	prevPidTerm = 0.0;
 	prevError = 0.0;
 	sumError = 0.0;
 }

@@ -11,7 +11,7 @@ private:
 	double Kd;
 	double Ki;
 	double prevError;
-	int prevOutput;
+	double prevPidTerm;
 	double sumError;
 public:
 	Pid(double Kp, double Kd, double Ki);
