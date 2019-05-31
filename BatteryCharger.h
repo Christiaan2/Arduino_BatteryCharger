@@ -26,7 +26,7 @@
 #define SUPPLY_VOLTAGE 24.0
 #define MAXTIME 10800000 // in ms
 #define FREQUENCY 250 // frequency run method is called in ms
-#define PID_KP 100.0
+#define PID_KP 125.0
 #define PID_KD 0.0
 #define PID_KI 0.0
 
@@ -38,6 +38,7 @@ private:
 	Oscilloscope oscilloscope;
 	bool stop;
 	unsigned long time;
+	int prevPWM_value;
 
  public:
 	 BatteryCharger();

@@ -5,7 +5,7 @@
 #include "BatteryCharger.h"
 
 BatteryCharger::BatteryCharger()
-	: timer(FREQUENCY), oscilloscope(BUTTON_PIN), pid(PID_KP, PID_KD, PID_KI), stop(false), time(0)
+	: timer(FREQUENCY), oscilloscope(BUTTON_PIN), pid(PID_KP, PID_KD, PID_KI), stop(false), time(0), prevPWM_value(0)
 {
 	pinMode(REDLEDPIN, OUTPUT);
 	pinMode(YELLOWLEDPIN, OUTPUT);
@@ -58,7 +58,12 @@ void BatteryCharger::run()
 				// For Litium ion cells implement maximum voltage
 				PWM_value = pid.calcPidTerm(CHARGE_CURRENT, Charge_Current);
 			}
-			analogWrite(PWM_PIN, PWM_value);
+
+			if (PWM_value != prevPWM_value)
+			{
+				analogWrite(PWM_PIN, PWM_value);
+				prevPWM_value = PWM_value;
+			}
 		}
 
 		oscilloscope.setSensorReading(0, PWM_value);
