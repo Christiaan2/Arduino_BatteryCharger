@@ -19,12 +19,15 @@ int Pid::calcPidTerm(double setPoint, double curValue)
 	else
 	{
 		double error = setPoint - curValue;
+		if (abs(error) < 0.0015)
+		{
+			return int(round(prevPidTerm));
+		}
 		sumError = sumError + error;
 		double pidTerm = (Kp * error) + (Kd * (error - prevError)) + (Ki * sumError);
 		prevError = error;
 		prevPidTerm = constrain(prevPidTerm + pidTerm, 0.0, 255.0);
-		int output = int(round(prevPidTerm));
-		return output;
+		return int(round(prevPidTerm));
 	}
 }
 

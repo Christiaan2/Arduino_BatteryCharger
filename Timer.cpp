@@ -38,4 +38,3 @@ void Timer::setTimer(int frequency)
 Timer::~Timer()
 {
 }
-
