@@ -5,7 +5,7 @@
 #include "Oscilloscope.h"
 
 Oscilloscope::Oscilloscope(int _buttonPin)
-	: sampling_on(false), timeOffset_go(false), timeOffSet(0), button(_buttonPin)
+	: sampling_on(false), timeOffSet(0), button(_buttonPin)
 {
 	pinMode(LED, OUTPUT);
 	digitalWrite(LED, sampling_on);
@@ -41,7 +41,7 @@ void Oscilloscope::checkButton(Button::buttonResult bResult = Button::undefined)
 		}
 		else
 		{ //Start sampling
-			timeOffset_go = true;
+			timeOffSet = millis();
 			Serial.write(start_message, 2);
 			sampling_on = !sampling_on;
 			digitalWrite(LED, sampling_on);
@@ -54,11 +54,6 @@ void Oscilloscope::checkButton(Button::buttonResult bResult = Button::undefined)
 void Oscilloscope::setTime()
 {
 	Time = millis(); //Time when sample was taken
-	if (timeOffset_go) //First sample?
-	{ //Yes, save time offset
-		timeOffSet = Time;
-		timeOffset_go = false;
-	}
 	Time = Time - timeOffSet; //Remove time offset
 }
 

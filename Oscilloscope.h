@@ -14,7 +14,6 @@ class Oscilloscope
 private:
 	bool sampling_on;  //True when sampling is on
 	bool takeSample;
-	bool timeOffset_go; //First timestamp is used to remove time offset
 	unsigned long Time;
 	unsigned long timeOffSet; //Time offset (Time = millis() - timeOffset)
 	Button button;
