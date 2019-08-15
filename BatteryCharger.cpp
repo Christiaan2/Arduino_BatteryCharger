@@ -40,9 +40,9 @@ void BatteryCharger::run()
 			int Current_Sensing_Voltage = analogRead(CURRENT_SENSING_PIN);
 			int Battery_Voltage = analogRead(BATTERY_PIN);
 			int Battery_Temperature = analogRead(TEMP_PIN);
-			double Charge_Current = ((Current_Sensing_Voltage / 1024.0 * 5.0) / R_CURRENT_SENSING) + (Battery_Voltage / 1024.0 * 5.0) / BATTERY_VOLTAGE_DIVIDER_1;
-			double batVoltage = SUPPLY_VOLTAGE - ((Battery_Voltage / 1024.0 * 5.0) / BATTERY_VOLTAGE_DIVIDER_1 * (BATTERY_VOLTAGE_DIVIDER_1 + BATTERY_VOLTAGE_DIVIDER_2));
-			double batTemp = ((Battery_Temperature / 1024.0 * 5.0) - 0.5) * 100.0;
+			double Charge_Current = ((Current_Sensing_Voltage / 1023.0 * 5.0) / R_CURRENT_SENSING) + (Battery_Voltage / 1023.0 * 5.0) / BATTERY_VOLTAGE_DIVIDER_1;
+			double batVoltage = SUPPLY_VOLTAGE - ((Battery_Voltage / 1023.0 * 5.0) / BATTERY_VOLTAGE_DIVIDER_1 * (BATTERY_VOLTAGE_DIVIDER_1 + BATTERY_VOLTAGE_DIVIDER_2));
+			double batTemp = ((Battery_Temperature / 1023.0 * 5.0) - 0.5) * 100.0;
 
 			if (!stop)
 			{

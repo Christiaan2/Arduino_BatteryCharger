@@ -21,7 +21,7 @@
 #define R_CURRENT_SENSING 6.8 // in Ohm
 #define BATTERY_VOLTAGE_DIVIDER_1 21000.0
 #define BATTERY_VOLTAGE_DIVIDER_2 98000.0
-#define CHARGE_CURRENT 0.32 //in A
+#define CHARGE_CURRENT 0.42 //in A
 #define SUPPLY_VOLTAGE 24.0
 #define MAXTIME 10800000 // in ms
 #define FREQUENCY 2000 // frequency run method is called in ms

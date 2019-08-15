@@ -91,11 +91,11 @@ while(sampling)
             end
             Time = fread(Arduino,1,'uint32');%Read time as unsigned integer (4 bytes)
             
-            SensorData = double(SensorReading) / 1024 * 5;
+            SensorData = double(SensorReading) / 1023 * 5;
             plotData = zeros(1,NChannels);
             plotData(1) = (SensorData(2) / 6.8) + (SensorData(3) / 21000);
             plotData(2) = 24 - (SensorData(3) / 21000 * (21000 + 98000));
-            plotData(3) = SensorData(1) * 1024 / 5;
+            plotData(3) = SensorData(1) * 1023 / 5;
             plotData(4) = (SensorData(4) - 0.5) * 100;
             
             %Update texfile
